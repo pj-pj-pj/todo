@@ -84,8 +84,6 @@ function displayTask(task) {
     date.disabled = true;
   }
 
-  name.addEventListener('blur', () => task.name = name.textContent)
-
   delBtn.onclick = function () {
     taskCard.remove();
     task.delete();
@@ -106,6 +104,9 @@ function displayTask(task) {
     if (task.priority == 'Medium') priority.style.backgroundColor = '#9c702a';
     if (task.priority == 'Low') priority.style.backgroundColor = '#4c5e3d';
   }
+
+  name.addEventListener('blur', () => task.name = name.textContent);
+  date.addEventListener('blur', () => task.dueDate = date.value);
 
   state.addEventListener('click', () => {
     if (task.isFin == 'Unfinished') {
@@ -128,7 +129,9 @@ function displayTask(task) {
 
 function showNav(element) {
   const addTaskDiv = document.querySelector('#addtask-container');
+  const header = document.querySelector('p.title');
   addTaskDiv.style.display = 'none';
+  if (header.textContent !== 'PROJECTS') showTaskNavBtns();
 
   if (element.classList.contains('visible')) {
     element.classList.remove('visible');
