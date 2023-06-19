@@ -48,9 +48,11 @@ function displayTask(task) {
   taskCard.classList.add('task-card');
   const name = document.createElement('p');
   name.classList.add('task-name');
+  name.contentEditable = true;
   const state = document.createElement('button');
   state.classList.add('task-state');
-  const date = document.createElement('p');
+  const date = document.createElement('input');
+  date.type = 'date';
   date.classList.add('task-date');
   const priority = document.createElement('button');
   priority.classList.add('priority');
@@ -60,13 +62,68 @@ function displayTask(task) {
 
   name.textContent = task.name;
   state.textContent = task.isFin;
-  date.textContent = task.dueDate;
+  date.value = task.dueDate;
   priority.textContent = task.priority;
   delImg.src = delLogo;
 
   taskCard.append(name, state, date, priority, delBtn);
   container.append(taskCard);
   delBtn.append(delImg);
+
+  //for editing tasks
+
+  if (task.priority == 'High') priority.style.backgroundColor = '#a12535';
+  if (task.priority == 'Medium') priority.style.backgroundColor = '#9c702a';
+  if (task.priority == 'Low') priority.style.backgroundColor = '#4c5e3d';
+
+  if (task.isFin == 'Finished') {
+    name.style.textDecoration = 'line-through';
+    taskCard.style.filter = 'brightness(50%)';
+    name.disabled = true;
+    priority.disabled = true;
+    date.disabled = true;
+  }
+
+  name.addEventListener('blur', () => task.name = name.textContent)
+
+  delBtn.onclick = function () {
+    taskCard.remove();
+    task.delete();
+  }
+
+  priority.onclick = function () {
+    if (task.priority == 'High') {
+      task.setPriority('Low')
+    } else if (task.priority == 'Medium') {
+      task.setPriority('High')
+    } else if (task.priority == 'Low') {
+      task.setPriority('Medium')
+    }
+
+    priority.textContent = task.priority;
+
+    if (task.priority == 'High') priority.style.backgroundColor = '#a12535';
+    if (task.priority == 'Medium') priority.style.backgroundColor = '#9c702a';
+    if (task.priority == 'Low') priority.style.backgroundColor = '#4c5e3d';
+  }
+
+  state.addEventListener('click', () => {
+    if (task.isFin == 'Unfinished') {
+      name.style.textDecoration = 'line-through';
+      taskCard.style.filter = 'brightness(60%)';
+      name.disabled = true;
+      priority.disabled = true;
+      date.disabled = true;
+    } else {
+      name.style.textDecoration = 'none';
+      taskCard.style.filter = 'brightness(100%)';
+      name.disabled = false;
+      priority.disabled = false;
+      date.disabled = false;
+    }
+    task.toggleComplete();
+    state.textContent = task.isFin;
+  })
 }
 
 function showNav(element) {
@@ -233,6 +290,7 @@ function createTaskForm() {
 
 function loadAddTaskForm() {
   const addTaskDiv = document.querySelector('#addtask-container');
+  const taskNameField = document.querySelector('#name-field');
   addTaskDiv.style.display = 'flex';
   hideTaskNavBtns();
   taskNameField.focus();

@@ -26,8 +26,21 @@ export function createTask(name, dueDate, priority) {
   };
 
   task.toggleComplete = function () {
-    if (this.isFin == 'Finished') this.isFin = 'Unfinished';
-    if (this.isFin != 'Finished') this.isFin = 'Finished';
+    if (this.isFin == 'Finished') {
+      this.isFin = 'Unfinished';
+    } else {
+      this.isFin = 'Finished';
+    }
+  };
+
+  task.delete = function () {
+    for (let project of projList.getList()) {
+      const taskIndex = project.getList().indexOf(this);
+      if (taskIndex !== -1) {
+        project.getList().splice(taskIndex, 1);
+        break; // Exit the loop after deleting the task
+      }
+    }
   };
 
   return task;
@@ -63,26 +76,14 @@ export default function todo() {
   projList.add(createList('Test Project'));
   projList.add(createList('Test Project 2'));
 
-  projList.getList()[0].add(createTask('Task name', '01-05-2023', 'medium'));
-  projList.getList()[0].add(createTask('Task name here', '01-06-2023', 'high'));
-  projList.getList()[0].add(createTask('Task name here', '01-07-2023', 'low'));
-  projList.getList()[0].add(createTask('Task name here', '01-06-2023', 'high'));
-  projList.getList()[0].add(createTask('Task name here', '01-06-2023', 'high'));
-  projList.getList()[1].add(createTask('Task name here', '01-07-2023', 'low'));
-  projList.getList()[1].add(createTask('Task name here', '01-06-2023', 'high'));
-  projList.getList()[1].add(createTask('Task name here', '01-07-2023', 'low'));
-  projList.getList()[1].add(createTask('Task name here', '01-06-2023', 'high'));
-  projList.getList()[1].add(createTask('Task name here', '01-06-2023', 'high'));
-  projList.getList()[1].add(createTask('Task name here', '01-06-2023', 'high'));
-  projList.getList()[1].add(createTask('Task name here', '01-06-2023', 'high'));
-  projList.getList()[2].add(createTask('Task name', '01-05-2023', 'medium'));
-  projList.getList()[2].add(createTask('Task name here', '01-07-2023', 'low'));
-  projList.getList()[2].add(createTask('Task name here', '01-06-2023', 'high'));
-  projList.getList()[2].add(createTask('Task name here', '01-06-2023', 'high'));
-
-  projList.getTaskOf(0, 0).toggleComplete();
-  projList.getTaskOf(1, 1).toggleComplete();
-  projList.getTaskOf(2, 0).setDueDate('10-12-2023');
-  projList.getTaskOf(0, 1).setName('Different task name here');
-  projList.getTaskOf(2, 2).setPriority('high');
+  projList.getList()[0].add(createTask('Task name', '2023-05-01', 'Medium'));
+  projList.getList()[0].add(createTask('Task name here', '2023-08-09', 'High'));
+  projList.getList()[0].add(createTask('Task name here', '2023-08-09', 'High'));
+  projList.getList()[1].add(createTask('Task name here', '2023-08-09', 'Low'));
+  projList.getList()[1].add(createTask('Task name here', '2023-08-09', 'High'));
+  projList.getList()[1].add(createTask('Task name here', '2023-08-09', 'Low'));
+  projList.getList()[2].add(createTask('Task name', '2023-05-01', 'Medium'));
+  projList.getList()[2].add(createTask('Task name here', '2023-07-23', 'Low'));
+  projList.getList()[2].add(createTask('Task name here', '2023-07-23', 'High'));
+  projList.getList()[2].add(createTask('Task name here', '2023-07-23', 'High'));
 }
