@@ -135,6 +135,13 @@ section {
   font-size: 1.6em;
 }
 
+#content-header .title:focus-visible {
+  outline: none;
+  border-bottom: 1px solid var(--text);
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
 #back-btn {
   display: none;
   align-items: center;
@@ -215,7 +222,13 @@ section .btn {
 }
 
 #container span p {
+  width: 100%;
   font-size: 1.5em;
+}
+
+#container span p:focus-visible {
+  outline: none;
+  border-bottom: 1px solid var(--text);
 }
 
 .task-card,

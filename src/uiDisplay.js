@@ -2,6 +2,7 @@ import projLogo from './assets/proj.png';
 import delLogo from './assets/delete.png';
 import { projList, createList, createTask } from './todolist';
 
+const section = document.querySelector('section');
 const contentHeader = document.querySelector('div#content-header p');
 const backToProj = document.querySelector('#back-btn');
 const container = document.querySelector('div#container');
@@ -36,7 +37,10 @@ function displayProjectTt(project) {
     plus.classList.add('btn');
     plus.textContent = '+';
     projImg.src = projLogo;
+    projTt.contentEditable = true;
     projTt.textContent = project.name;
+
+    projTt.addEventListener('blur', () => project.name = projTt.textContent);
 
     projHeader.append(projImg, projTt, plus);
     container.append(projHeader);
@@ -150,6 +154,7 @@ function unchild(parent) {
 
 function loadTaskPg() {
   showTaskNavBtns();
+  contentHeader.contentEditable = false;
   contentHeader.textContent = 'TASKS';
   document.querySelector('.task-menu button:first-child').style.display =
     'block';
@@ -171,6 +176,7 @@ function loadProjectPg() {
   addTask.style.display = 'none';
 
   contentHeader.textContent = 'PROJECTS';
+  contentHeader.contentEditable = false;
 
   for (let project of projList.getList()) {
     if (project.name != 'unlisted') {
@@ -198,6 +204,8 @@ function loadProjectPg() {
         unchild(container);
 
         contentHeader.textContent = project.name;
+        contentHeader.contentEditable = true;
+        contentHeader.addEventListener('blur', () => project.name = contentHeader.textContent);
         document.querySelector('.task-menu button:first-child').style.display =
           'block';
 
