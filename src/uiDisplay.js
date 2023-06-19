@@ -199,18 +199,25 @@ function loadProjectPg() {
 
       taskCount.textContent = `${uncompletedTasks.length} unfinished tasks`;
 
-      projCard.addEventListener('click', () => {
-        backToProj.classList.add('visible');
-        unchild(container);
+      delBtn.addEventListener('mousedown', () => {
+        projCard.remove();
+        projList.getList().splice(projList.getList().indexOf(project), 1);
+      })
 
-        contentHeader.textContent = project.name;
-        contentHeader.contentEditable = true;
-        contentHeader.addEventListener('blur', () => project.name = contentHeader.textContent);
-        document.querySelector('.task-menu button:first-child').style.display =
-          'block';
+      projCard.addEventListener('click', (e) => {
+        if (e.target != delBtn || e.target != delImg) {
+          backToProj.classList.add('visible');
+          unchild(container);
 
-        for (let task of project.getList()) {
-          displayTask(task);
+          contentHeader.textContent = project.name;
+          contentHeader.contentEditable = true;
+          contentHeader.addEventListener('blur', () => project.name = contentHeader.textContent);
+          document.querySelector('.task-menu button:first-child').style.display =
+            'block';
+
+          for (let task of project.getList()) {
+            displayTask(task);
+          }
         }
       });
 
