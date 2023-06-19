@@ -41,6 +41,9 @@ function displayProjectTt(project) {
     projTt.textContent = project.name;
 
     projTt.addEventListener('blur', () => project.name = projTt.textContent);
+    plus.addEventListener('click', () => {
+      loadAddTaskForm();
+    })
 
     projHeader.append(projImg, projTt, plus);
     container.append(projHeader);
@@ -156,6 +159,7 @@ function loadTaskPg() {
   showTaskNavBtns();
   contentHeader.contentEditable = false;
   contentHeader.textContent = 'TASKS';
+  contentHeader.removeAttribute('data-index');
   document.querySelector('.task-menu button:first-child').style.display =
     'block';
 
@@ -177,6 +181,7 @@ function loadProjectPg() {
 
   contentHeader.textContent = 'PROJECTS';
   contentHeader.contentEditable = false;
+  contentHeader.removeAttribute('data-index');
 
   for (let project of projList.getList()) {
     if (project.name != 'unlisted') {
@@ -210,10 +215,10 @@ function loadProjectPg() {
           unchild(container);
 
           contentHeader.textContent = project.name;
+          contentHeader.dataset.index = `${projList.getList().indexOf(project)}`;
           contentHeader.contentEditable = true;
           contentHeader.addEventListener('blur', () => project.name = contentHeader.textContent);
-          document.querySelector('.task-menu button:first-child').style.display =
-            'block';
+          addTask.style.display = 'block';
 
           for (let task of project.getList()) {
             displayTask(task);
@@ -263,7 +268,9 @@ function createTaskForm() {
   taskNameField.type = 'text';
   taskNameField.placeholder = 'Task name...';
 
+  const today = new Date().toISOString().split('T')[0];
   const taskDueDate = document.createElement('input');
+  taskDueDate.value = today;
   taskDueDate.id = 'duedate-field';
   taskDueDate.type = 'date';
 
@@ -273,11 +280,11 @@ function createTaskForm() {
   priorityLabel.textContent = 'PRIORITY:';
   const taskPriority = document.createElement('select');
   const high = document.createElement('option');
-  high.textContent = 'HIGH';
+  high.textContent = 'High';
   const medium = document.createElement('option');
-  medium.textContent = 'MEDIUM';
+  medium.textContent = 'Medium';
   const low = document.createElement('option');
-  low.textContent = 'LOW';
+  low.textContent = 'Low';
   taskPriority.append(low, medium, high);
   priorityContainer.append(priorityLabel, taskPriority);
 
@@ -289,8 +296,32 @@ function createTaskForm() {
   cancelBtn.textContent = 'CANCEL';
   buttonsContainer.append(saveBtn, cancelBtn);
 
+  saveBtn.addEventListener('click', () => {
+    const i = contentHeader.getAttribute('data-index');
+    if (contentHeader.textContent == 'TASKS') {
+      projList.getList()[0].add(createTask(taskNameField.value, taskDueDate.value, taskPriority.value));
+      unchild(container);
+      loadTaskPg();
+    } else {
+      projList.getList()[i].add(createTask(taskNameField.value, taskDueDate.value, taskPriority.value));
+      unchild(container);
+
+      for (let task of projList.getList()[i].getList()) {
+        displayTask(task);
+      }
+    }
+
+    taskNameField.value = ''
+    taskDueDate.value = today;
+    taskPriority.value = 'Low';
+    hideTaskNavBtns();
+  });
+
   cancelBtn.addEventListener('click', () => {
     showTaskNavBtns();
+    taskNameField.value = ''
+    taskDueDate.value = today;
+    taskPriority.value = 'Low';
     addTaskDiv.style.display = 'none';
   });
 
@@ -309,9 +340,16 @@ function createTaskForm() {
 function loadAddTaskForm() {
   const addTaskDiv = document.querySelector('#addtask-container');
   const taskNameField = document.querySelector('#name-field');
+  const taskPriority = document.querySelector('select');
+  const taskDueDate = document.querySelector('#duedate-field');
+  const today = new Date().toISOString().split('T')[0];
   addTaskDiv.style.display = 'flex';
   hideTaskNavBtns();
   taskNameField.focus();
+
+  taskNameField.value = ''
+  taskDueDate.value = today;
+  taskPriority.value = 'Low';
 }
 
 function showTaskNavBtns() {
