@@ -1,5 +1,5 @@
-import projLogo from './assets/proj.png';
-import delLogo from './assets/delete.png';
+import projLogo from '/dist/assets/proj.png';
+import delLogo from '/dist/assets/delete.png';
 import { projList, createList, createTask } from './todolist';
 
 const contentHeader = document.querySelector('div#content-header p');
