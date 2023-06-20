@@ -132,7 +132,7 @@ function showNav(element) {
   const addTaskDiv = document.querySelector('#addtask-container');
   const header = document.querySelector('p.title');
   addTaskDiv.style.display = 'none';
-  if (header.textContent !== 'PROJECTS') showTaskNavBtns();
+  showTaskNavBtns();
 
   if (element.classList.contains('visible')) {
     element.classList.remove('visible');
@@ -150,7 +150,6 @@ function unchild(parent) {
 }
 
 function loadTaskPg() {
-  showTaskNavBtns();
   contentHeader.contentEditable = false;
   contentHeader.textContent = 'TASKS';
   contentHeader.removeAttribute('data-index');
@@ -373,8 +372,16 @@ function loadAddTaskForm() {
 }
 
 function showTaskNavBtns() {
-  addTask.style.display = 'block';
-  addProj.style.display = 'block';
+  if (contentHeader.textContent == 'TASKS') {
+    addTask.style.display = 'block';
+    addProj.style.display = 'block';
+  } else if (contentHeader.textContent == 'PROJECTS') {
+    addTask.style.display = 'none';
+    addProj.style.display = 'block';
+  } else {
+    addTask.style.display = 'block';
+    addProj.style.display = 'none';
+  }
 }
 
 function hideTaskNavBtns() {

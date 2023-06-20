@@ -390,7 +390,7 @@ select {
 
 #addtask-container select {
   border: 0;
-  flex-shrink: 1;
+  flex-grow: 2;
 }
 
 #addtask-container select option {
@@ -423,10 +423,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 
   border: 1px solid var(--border);
   padding-left: 10px;
-}
-
-#priority-container select {
-  flex-grow: 1;
+  flex-grow: 2;
 }
 
 #addtask-btn-container {
