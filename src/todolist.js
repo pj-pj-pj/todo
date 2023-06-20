@@ -60,10 +60,6 @@ export function createList(name) {
     this.items.push(a);
   };
 
-  list.del = function (taskIndex) {
-    this.items.splice(taskIndex, 1);
-  };
-
   list.getList = function () {
     return this.items;
   };
@@ -72,7 +68,7 @@ export function createList(name) {
 }
 
 export default function todo() {
-  projList.add(createList('unlisted'));
+  projList.add(createList('General Task'));
   projList.add(createList('Test Project'));
   projList.add(createList('Test Project 2'));
 

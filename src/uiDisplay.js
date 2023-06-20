@@ -2,7 +2,6 @@ import projLogo from './assets/proj.png';
 import delLogo from './assets/delete.png';
 import { projList, createList, createTask } from './todolist';
 
-const section = document.querySelector('section');
 const contentHeader = document.querySelector('div#content-header p');
 const backToProj = document.querySelector('#back-btn');
 const container = document.querySelector('div#container');
@@ -27,27 +26,22 @@ export default function init() {
 }
 
 function displayProjectTt(project) {
-  if (project.name != 'unlisted') {
-    const projHeader = document.createElement('span');
-    projHeader.dataset.index = projList.getList().indexOf(project).toString();
-    const projTt = document.createElement('p');
-    const projImg = new Image();
-    const plus = document.createElement('button');
-    plus.classList.add('add-btn');
-    plus.classList.add('btn');
-    plus.textContent = '+';
-    projImg.src = projLogo;
+  const projHeader = document.createElement('span');
+  const projTt = document.createElement('p');
+  const projImg = new Image();
+  projImg.src = projLogo;
+  projTt.textContent = project.name;
+
+  if (project.name == 'General Task') {
+    projTt.contentEditable = false;
+  } else {
     projTt.contentEditable = true;
-    projTt.textContent = project.name;
-
-    projTt.addEventListener('blur', () => project.name = projTt.textContent);
-    plus.addEventListener('click', () => {
-      loadAddTaskForm();
-    })
-
-    projHeader.append(projImg, projTt, plus);
-    container.append(projHeader);
   }
+
+  projTt.addEventListener('blur', () => project.name = projTt.textContent);
+
+  projHeader.append(projImg, projTt);
+  container.append(projHeader);
 }
 
 function displayTask(task) {
@@ -226,7 +220,11 @@ function loadProjectPg() {
         }
       });
 
-      projCard.append(name, taskCount, delBtn);
+      if (project.name == 'General Task') {
+        projCard.append(name, taskCount);
+      } else {
+        projCard.append(name, taskCount, delBtn);
+      }
       container.append(projCard);
       delBtn.append(delImg);
     }
@@ -288,6 +286,15 @@ function createTaskForm() {
   taskPriority.append(low, medium, high);
   priorityContainer.append(priorityLabel, taskPriority);
 
+  const projContainer = document.createElement('select');
+  projContainer.id = 'proj-select-container';
+  for (let proj of projList.getList()) {
+    const project = document.createElement('option');
+    project.dataset.index = projList.getList().indexOf(proj);
+    project.textContent = `${proj.name}`;
+    projContainer.append(project);
+  }
+
   const buttonsContainer = document.createElement('div');
   buttonsContainer.id = 'addtask-btn-container';
   const saveBtn = document.createElement('button');
@@ -298,20 +305,25 @@ function createTaskForm() {
 
   saveBtn.addEventListener('click', () => {
     const i = contentHeader.getAttribute('data-index');
-    if (contentHeader.textContent == 'TASKS') {
-      projList.getList()[0].add(createTask(taskNameField.value, taskDueDate.value, taskPriority.value));
-      unchild(container);
-      loadTaskPg();
-    } else {
-      projList.getList()[i].add(createTask(taskNameField.value, taskDueDate.value, taskPriority.value));
-      unchild(container);
+    const selectedOption = projContainer.options[projContainer.selectedIndex].getAttribute('data-index');
 
-      for (let task of projList.getList()[i].getList()) {
-        displayTask(task);
+    if (taskNameField.value != '') {
+      if (contentHeader.textContent == 'TASKS') {
+        projList.getList()[selectedOption].add(createTask(taskNameField.value, taskDueDate.value, taskPriority.value));
+
+        unchild(container);
+        loadTaskPg();
+      } else {
+        projList.getList()[i].add(createTask(taskNameField.value, taskDueDate.value, taskPriority.value));
+        unchild(container);
+
+        for (let task of projList.getList()[i].getList()) {
+          displayTask(task);
+        }
       }
     }
 
-    taskNameField.value = ''
+    taskNameField.value = '';
     taskDueDate.value = today;
     taskPriority.value = 'Low';
     hideTaskNavBtns();
@@ -330,6 +342,7 @@ function createTaskForm() {
     taskNameField,
     taskDueDate,
     priorityContainer,
+    projContainer,
     buttonsContainer
   );
 
@@ -343,9 +356,16 @@ function loadAddTaskForm() {
   const taskPriority = document.querySelector('select');
   const taskDueDate = document.querySelector('#duedate-field');
   const today = new Date().toISOString().split('T')[0];
+  const projContainer = document.querySelector('#proj-select-container');
   addTaskDiv.style.display = 'flex';
   hideTaskNavBtns();
   taskNameField.focus();
+
+  if (contentHeader.textContent == 'TASKS') {
+    projContainer.style.display = 'block';
+  } else {
+    projContainer.style.display = 'none'
+  }
 
   taskNameField.value = ''
   taskDueDate.value = today;
