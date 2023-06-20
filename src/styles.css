@@ -352,7 +352,8 @@ footer {
 
 /* ADDTASK FORM */
 
-#addtask-container {
+#addtask-container,
+#addproj-container {
   display: flex;
   width: 100%;
   flex-wrap: wrap;
@@ -367,17 +368,24 @@ footer {
   padding: 15px;
 }
 
-#addtask-container p.add-task-title {
+#addtask-container p.add-task-title,
+#addproj-container p.add-proj-title {
   width: 100%;
   margin-bottom: 10px;
 }
 
 #addtask-container input,
-select:focus-visible {
+select:focus-visible,
+#addproj-container input {
   outline: none;
 }
 
+#addproj-container input {
+  flex-grow: 1;
+}
+
 #addtask-container input,
+#addproj-container input,
 select {
   background-color: var(--bg-depth);
   border: none;
@@ -426,7 +434,8 @@ input[type='date']::-webkit-calendar-picker-indicator {
   flex-grow: 2;
 }
 
-#addtask-btn-container {
+#addtask-btn-container,
+#addproj-btn-container {
   display: flex;
   margin-top: 10px;
   justify-self: center;
@@ -435,11 +444,13 @@ input[type='date']::-webkit-calendar-picker-indicator {
   margin: auto;
 }
 
-#addtask-btn-container button:first-child:hover {
+#addtask-btn-container button:first-child:hover,
+#addproj-btn-container button:first-child:hover {
   background-color: var(--highlight);
 }
 
-#addtask-btn-container button:nth-child(2):hover {
+#addtask-btn-container button:nth-child(2):hover,
+#addproj-btn-container button:nth-child(2):hover {
   filter: brightness(80%);
   background-color: var(--bg);
 }

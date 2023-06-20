@@ -17,12 +17,14 @@ export default function init() {
   loadTaskPg();
   loadPgOnClick();
   createTaskForm();
+  createProjForm();
 
   navMenuBtn.addEventListener('click', () => showNav(headernav));
   taskMenuBtn.addEventListener('click', () => showNav(tasknav));
   backToProj.addEventListener('click', () => unchild(container));
   backToProj.addEventListener('click', loadProjectPg);
   addTask.addEventListener('click', loadAddTaskForm);
+  addProj.addEventListener('click', loadAddProjForm);
 }
 
 function displayProjectTt(project) {
@@ -70,6 +72,8 @@ function displayTask(task) {
   taskCard.append(name, state, date, priority, delBtn);
   container.append(taskCard);
   delBtn.append(delImg);
+
+  showTaskNavBtns();
 
   //for editing tasks
 
@@ -130,8 +134,9 @@ function displayTask(task) {
 
 function showNav(element) {
   const addTaskDiv = document.querySelector('#addtask-container');
-  const header = document.querySelector('p.title');
+  const addProjDiv = document.querySelector('#addproj-container');
   addTaskDiv.style.display = 'none';
+  addProjDiv.style.display = 'none';
   showTaskNavBtns();
 
   if (element.classList.contains('visible')) {
@@ -166,11 +171,7 @@ function loadTaskPg() {
 
 function loadProjectPg() {
   unVisible();
-
-  const addTaskDiv = document.querySelector('#addtask-container');
-  addTaskDiv.style.display = 'none';
-  addProj.style.display = 'block';
-  addTask.style.display = 'none';
+  hideTaskNavBtns();
 
   contentHeader.textContent = 'PROJECTS';
   contentHeader.contentEditable = false;
@@ -212,6 +213,8 @@ function loadProjectPg() {
           contentHeader.contentEditable = true;
           contentHeader.addEventListener('blur', () => project.name = contentHeader.textContent);
           addTask.style.display = 'block';
+          const addProjDiv = document.querySelector('#addproj-container');
+          addProjDiv.style.display = 'none';
 
           for (let task of project.getList()) {
             displayTask(task);
@@ -274,7 +277,7 @@ function createTaskForm() {
   const priorityContainer = document.createElement('div');
   priorityContainer.id = 'priority-container';
   const priorityLabel = document.createElement('p');
-  priorityLabel.textContent = 'PRIORITY:';
+  priorityLabel.textContent = 'PRIORITY';
   const taskPriority = document.createElement('select');
   const high = document.createElement('option');
   high.textContent = 'High';
@@ -371,6 +374,71 @@ function loadAddTaskForm() {
   taskPriority.value = 'Low';
 }
 
+function createProjForm() {
+  const tT = document.createElement('p');
+  tT.className = 'add-proj-title';
+  tT.textContent = 'NEW PROJECT';
+  const addProjDiv = document.createElement('div');
+  addProjDiv.id = 'addproj-container';
+  const projNameField = document.createElement('input');
+  projNameField.id = 'projname-field';
+  projNameField.type = 'text';
+  projNameField.placeholder = 'Project name...';
+
+  const buttonsContainer = document.createElement('div');
+  buttonsContainer.id = 'addproj-btn-container';
+  const saveBtn = document.createElement('button');
+  saveBtn.textContent = 'SAVE';
+  const cancelBtn = document.createElement('button');
+  cancelBtn.textContent = 'CANCEL';
+  buttonsContainer.append(saveBtn, cancelBtn);
+
+  saveBtn.addEventListener('click', () => {
+    projList.add(createList(projNameField.value));
+    unchild(container);
+
+    if (contentHeader.textContent == 'TASKS') loadTaskPg();
+    if (contentHeader.textContent == 'PROJECTS') loadProjectPg();
+
+    const addTaskDiv = document.querySelector('#addtask-container');
+    addTaskDiv.style.display = 'none';
+    addProjDiv.style.display = 'none';
+    projNameField.value = '';
+    showTaskNavBtns();
+
+    //update the select in task form to add new projects
+    const projContainer = document.querySelector('#proj-select-container');
+    unchild(projContainer);
+    for (let proj of projList.getList()) {
+      const project = document.createElement('option');
+      project.dataset.index = projList.getList().indexOf(proj);
+      project.textContent = `${proj.name}`;
+      projContainer.append(project);
+    }
+  });
+
+  cancelBtn.addEventListener('click', () => {
+    showTaskNavBtns();
+    projNameField.value = ''
+    addProjDiv.style.display = 'none';
+  });
+
+  addProjDiv.append(tT, projNameField, buttonsContainer);
+  tasknav.append(addProjDiv);
+  addProjDiv.style.display = 'none';
+}
+
+function loadAddProjForm() {
+  const addProjDiv = document.querySelector('#addproj-container');
+  const projNameField = document.querySelector('#projname-field');
+
+  addProjDiv.style.display = 'flex';
+  hideTaskNavBtns();
+  projNameField.focus();
+
+  projNameField.value = '';
+}
+
 function showTaskNavBtns() {
   if (contentHeader.textContent == 'TASKS') {
     addTask.style.display = 'block';
@@ -390,6 +458,10 @@ function hideTaskNavBtns() {
 }
 
 function unVisible() {
+  const addTaskDiv = document.querySelector('#addtask-container');
+  const addProjDiv = document.querySelector('#addproj-container');
+  addTaskDiv.style.display = 'none';
+  addProjDiv.style.display = 'none';
   backToProj.classList.remove('visible');
   tasknav.classList.remove('visible');
 }
