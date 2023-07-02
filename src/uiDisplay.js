@@ -40,7 +40,7 @@ function displayProjectTt(project) {
     projTt.contentEditable = true;
   }
 
-  projTt.addEventListener('blur', () => project.name = projTt.textContent);
+  projTt.addEventListener('blur', () => (project.name = projTt.textContent));
 
   projHeader.append(projImg, projTt);
   container.append(projHeader);
@@ -92,15 +92,15 @@ function displayTask(task) {
   delBtn.onclick = function () {
     taskCard.remove();
     task.delete();
-  }
+  };
 
   priority.onclick = function () {
     if (task.priority == 'High') {
-      task.setPriority('Low')
+      task.setPriority('Low');
     } else if (task.priority == 'Medium') {
-      task.setPriority('High')
+      task.setPriority('High');
     } else if (task.priority == 'Low') {
-      task.setPriority('Medium')
+      task.setPriority('Medium');
     }
 
     priority.textContent = task.priority;
@@ -108,10 +108,10 @@ function displayTask(task) {
     if (task.priority == 'High') priority.style.backgroundColor = '#a12535';
     if (task.priority == 'Medium') priority.style.backgroundColor = '#9c702a';
     if (task.priority == 'Low') priority.style.backgroundColor = '#4c5e3d';
-  }
+  };
 
-  name.addEventListener('blur', () => task.name = name.textContent);
-  date.addEventListener('blur', () => task.dueDate = date.value);
+  name.addEventListener('blur', () => (task.name = name.textContent));
+  date.addEventListener('blur', () => (task.dueDate = date.value));
 
   state.addEventListener('click', () => {
     if (task.isFin == 'Unfinished') {
@@ -129,7 +129,7 @@ function displayTask(task) {
     }
     task.toggleComplete();
     state.textContent = task.isFin;
-  })
+  });
 }
 
 function showNav(element) {
@@ -201,7 +201,7 @@ function loadProjectPg() {
       delBtn.addEventListener('mousedown', () => {
         projCard.remove();
         projList.getList().splice(projList.getList().indexOf(project), 1);
-      })
+      });
 
       projCard.addEventListener('click', (e) => {
         if (e.target != delBtn || e.target != delImg) {
@@ -209,9 +209,14 @@ function loadProjectPg() {
           unchild(container);
 
           contentHeader.textContent = project.name;
-          contentHeader.dataset.index = `${projList.getList().indexOf(project)}`;
+          contentHeader.dataset.index = `${projList
+            .getList()
+            .indexOf(project)}`;
           contentHeader.contentEditable = true;
-          contentHeader.addEventListener('blur', () => project.name = contentHeader.textContent);
+          contentHeader.addEventListener(
+            'blur',
+            () => (project.name = contentHeader.textContent)
+          );
           addTask.style.display = 'block';
           const addProjDiv = document.querySelector('#addproj-container');
           addProjDiv.style.display = 'none';
@@ -307,16 +312,34 @@ function createTaskForm() {
 
   saveBtn.addEventListener('click', () => {
     const i = contentHeader.getAttribute('data-index');
-    const selectedOption = projContainer.options[projContainer.selectedIndex].getAttribute('data-index');
+    const selectedOption =
+      projContainer.options[projContainer.selectedIndex].getAttribute(
+        'data-index'
+      );
 
     if (taskNameField.value != '') {
       if (contentHeader.textContent == 'TASKS') {
-        projList.getList()[selectedOption].add(createTask(taskNameField.value, taskDueDate.value, taskPriority.value));
-
+        projList
+          .getList()
+        [selectedOption].add(
+          createTask(
+            taskNameField.value,
+            taskDueDate.value,
+            taskPriority.value
+          )
+        );
         unchild(container);
         loadTaskPg();
       } else {
-        projList.getList()[i].add(createTask(taskNameField.value, taskDueDate.value, taskPriority.value));
+        projList
+          .getList()
+        [i].add(
+          createTask(
+            taskNameField.value,
+            taskDueDate.value,
+            taskPriority.value
+          )
+        );
         unchild(container);
 
         for (let task of projList.getList()[i].getList()) {
@@ -333,7 +356,7 @@ function createTaskForm() {
 
   cancelBtn.addEventListener('click', () => {
     showTaskNavBtns();
-    taskNameField.value = ''
+    taskNameField.value = '';
     taskDueDate.value = today;
     taskPriority.value = 'Low';
     addTaskDiv.style.display = 'none';
@@ -366,10 +389,10 @@ function loadAddTaskForm() {
   if (contentHeader.textContent == 'TASKS') {
     projContainer.style.display = 'block';
   } else {
-    projContainer.style.display = 'none'
+    projContainer.style.display = 'none';
   }
 
-  taskNameField.value = ''
+  taskNameField.value = '';
   taskDueDate.value = today;
   taskPriority.value = 'Low';
 }
@@ -419,7 +442,7 @@ function createProjForm() {
 
   cancelBtn.addEventListener('click', () => {
     showTaskNavBtns();
-    projNameField.value = ''
+    projNameField.value = '';
     addProjDiv.style.display = 'none';
   });
 
