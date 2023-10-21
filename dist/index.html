@@ -2,10 +2,23 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="icon" href="./assets/logo.png" type="image/x-icon" />
-    <link rel="stylesheet" href="./assets/styles.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="X-UA-Compatible"
+      content="IE=edge"
+    />
+    <link
+      rel="icon"
+      href="./assets/logo.png"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      href="./assets/styles.css"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
     <title>todo</title>
   </head>
   <body>
@@ -17,24 +30,51 @@
     </header>
     <main>
       <nav class="visible">
-        <div id="tasks" class="tab active">
-          <img src="./assets/tasks.png" />
+        <div
+          id="tasks"
+          class="tab active"
+        >
+          <img src="./assets/proj.png" />
           <p>TASKS</p>
         </div>
-        <div id="proj" class="tab">
+        <div
+          id="proj"
+          class="tab"
+        >
           <img src="./assets/projects.png" />
           <p>PROJECTS</p>
+        </div>
+        <div>
+          <img src="./assets/tasks.png" />
+          <div id="import-btn">
+            <p>IMPORT TASK LIST:</p>
+            <input
+              id="json-file-input"
+              type="file"
+              accept=".json"
+            />
+          </div>
+        </div>
+        <div id="save-tab">
+          <img src="./assets/logo.png" />
+          <p>SAVE LIST</p>
         </div>
       </nav>
       <section>
         <div id="content-header">
           <button id="back-btn">
-            <img src="./assets/back.png" alt="" />
+            <img
+              src="./assets/back.png"
+              alt=""
+            />
             <span class="backbtn-text">PROJECTS</span>
           </button>
           <p class="title"></p>
           <button class="taskoption-btn btn">
-            <img src="./assets/option.png" alt="" />
+            <img
+              src="./assets/option.png"
+              alt=""
+            />
           </button>
         </div>
         <div class="task-menu">

@@ -1,4 +1,4 @@
-export const projList = createList('Tasks'); //storage of all projects
+export let projList = createList('Tasks'); //storage of all projects
 
 // p for proj, t for task
 projList.getTaskOf = function (pIndex, tIndex) {

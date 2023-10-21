@@ -454,3 +454,12 @@ input[type='date']::-webkit-calendar-picker-indicator {
   filter: brightness(80%);
   background-color: var(--bg);
 }
+
+#import-btn {
+  display: block;
+  padding: 0;
+}
+
+#import-btn p {
+  margin-bottom: 2px;
+}

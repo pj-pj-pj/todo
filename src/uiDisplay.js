@@ -321,25 +321,25 @@ function createTaskForm() {
       if (contentHeader.textContent == 'TASKS') {
         projList
           .getList()
-        [selectedOption].add(
-          createTask(
-            taskNameField.value,
-            taskDueDate.value,
-            taskPriority.value
-          )
-        );
+          [selectedOption].add(
+            createTask(
+              taskNameField.value,
+              taskDueDate.value,
+              taskPriority.value
+            )
+          );
         unchild(container);
         loadTaskPg();
       } else {
         projList
           .getList()
-        [i].add(
-          createTask(
-            taskNameField.value,
-            taskDueDate.value,
-            taskPriority.value
-          )
-        );
+          [i].add(
+            createTask(
+              taskNameField.value,
+              taskDueDate.value,
+              taskPriority.value
+            )
+          );
         unchild(container);
 
         for (let task of projList.getList()[i].getList()) {
@@ -487,4 +487,9 @@ function unVisible() {
   addProjDiv.style.display = 'none';
   backToProj.classList.remove('visible');
   tasknav.classList.remove('visible');
+}
+
+// display imported file with a click ;>
+export function updateDisplayedToImportedTodo() {
+  document.querySelector('#tasks').click();
 }
